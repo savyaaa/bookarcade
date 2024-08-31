@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Page Not Found</title>
+    <style>
+      body {
+        font-family: "Georgia", serif;
+        background-color: #f5f1e8;
+        color: #3a3a3a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        text-align: center;
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+      }
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+        color: #8b4513;
+      }
+      p {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+      }
+      .book-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        color: #8b4513;
+      }
+      .home-button {
+        background-color: #8b4513;
+        color: #fff;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .home-button:hover {
+        background-color: #6b3410;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .floating {
+        animation: float 3s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="book-icon floating">📚</div>
+      <h1>404</h1>
+      <p>
+        Oops! The page you're looking for seems to be missing from our shelves.
+      </p>
+      <button class="home-button" onclick="goToHome()">
+        Return to Main Library
+      </button>
+    </div>
+
+    <script>
+      function goToHome() {
+        window.location.href = "/";
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="/images/book-icon.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      data-purpose="Layout StyleSheet"
+      title="Web Awesome"
+      href="/css/app-wa-09b459cf485d4b1f3304947240314c05.css?vsn=d"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/all.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-duotone-solid.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-thin.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-solid.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-regular.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-light.css"
+    />
+    <link rel="stylesheet" href="/css/main.css" />
+    <title>BookArcade | Library</title>
+  </head>
+  <body class="w-screen h-screen overflow-x-hidden">
+    <%- include('../partials/_header.ejs') %>
+    <main class="w-full min-h-screen bg-[#f4efe1] py-8 px-4 md:px-8">
+      <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-serif text-[#3c2f2f] mb-6 text-center">
+          <% if (foundUser) { %> Welcome, <%= foundUser.username %> <br />
+          <span class="text-xl italic">What would you like to read today?</span>
+          <% } else { %> Welcome to Our Library <% } %>
+        </h1>
+
+        <div class="mb-8">
+          <div class="relative max-w-md mx-auto">
+            <input
+              type="text"
+              name="search"
+              id="search"
+              placeholder="Search books or authors..."
+              class="w-full py-2 px-4 pr-10 rounded-full border-2 border-[#8b7d6b] focus:outline-none focus:border-[#5c4f3d] transition-colors duration-300"
+            />
+            <i
+              class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-[#8b7d6b]"
+            ></i>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <h2 class="text-2xl font-serif text-[#3c2f2f] mb-4">
+            Available Books
+          </h2>
+          <div class="w-16 h-1 bg-[#8b7d6b] rounded"></div>
+        </div>
+
+        <div
+          id="books-container"
+          class="grid grid-cols-1 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 overflow-y-auto max-h-[calc(100vh-160px)]"
+        ></div>
+      </div>
+    </main>
+    <%-include('../partials/_footer.ejs') %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const booksContainer = document.getElementById("books-container");
+        let books = [];
+
+        async function getBooks() {
+          try {
+            const response = await fetch(
+              "http://localhost:5000/api/library/books"
+            );
+            books = await response.json();
+            displayBooks(books);
+          } catch (error) {
+            console.error("Failed to fetch books:", error);
+            booksContainer.innerHTML =
+              '<p class="text-[#3c2f2f]">Failed to load books.</p>';
+          }
+        }
+
+        function displayBooks(booksToDisplay) {
+          booksContainer.innerHTML = "";
+          if (booksToDisplay.length > 0) {
+            booksToDisplay.forEach((book) => {
+              const bookElement = document.createElement("div");
+              bookElement.classList.add(
+                "w-fit",
+                "overflow-hidden",
+                "transition-transform",
+                "duration-300",
+                "hover:scale-105"
+              );
+              bookElement.innerHTML = `
+              <img src="${book.coverImageUrl}" alt="${
+                book.title
+              }" class="w-full h-64 object-contain object-left"/>
+              <div class="py-4">
+                <h3 class="text-lg font-semibold text-[#3c2f2f] mb-2 line-clamp-1 capitalize" title="${
+                  book.title
+                }">${book.title}</h3>
+                <p class="text-[#5c4f3d] mb-2 capitalize">By ${book.author}</p>
+                <div>
+                  <a title="Download this book" href="${
+                    book.fileUrl
+                  }" class="inline-block text-black text-2xl rounded transition-colors duration-300">
+                  <i class="fas fa-download mr-2"></i>
+                </a>
+                <button title="Add to book list" class="like-button text-2xl ${
+                  book.isLiked ? "text-red-500" : "text-gray-400"
+                }" data-book-id="${book._id}">
+                <i class="${
+                  book.isLiked
+                    ? "fas fa-heart text-red-500"
+                    : "fa-regular fa-heart text-black"
+                }"></i>
+              </button>
+                </div>
+              </div>
+        `;
+              booksContainer.appendChild(bookElement);
+              document.querySelectorAll(".like-button").forEach((button) => {
+                button.addEventListener("click", handleLikeClick);
+              });
+            });
+          } else {
+            booksContainer.innerHTML =
+              '<p class="text-[#3c2f2f]">No books available.</p>';
+          }
+        }
+
+        const searchInput = document.getElementById("search");
+        searchInput.addEventListener("input", () => {
+          const searchValue = searchInput.value.toLowerCase();
+          const filteredBooks = books.filter((book) => {
+            const bookTitle = book.title.toLowerCase();
+            const bookAuthor = book.author.toLowerCase();
+            return (
+              bookTitle.includes(searchValue) ||
+              bookAuthor.includes(searchValue)
+            );
+          });
+          displayBooks(filteredBooks);
+        });
+
+        async function handleLikeClick(event) {
+          const button = event.currentTarget;
+          const bookId = button.dataset.bookId;
+          const isCurrentlyLiked = button.classList.contains("text-red-500");
+
+          try {
+            const response = await fetch(
+              `http://localhost:5000/api/library/books/${bookId}/like`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ isLiked: !isCurrentlyLiked }),
+              }
+            );
+
+            if (response.ok) {
+              const book = books.find((b) => b._id === bookId);
+              if (book) {
+                book.isLiked = !isCurrentlyLiked;
+              }
+              window.location.reload();
+            } else {
+              console.error("Failed to update like status");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        }
+
+        getBooks();
+      });
+    </script>
+  </body>
+</html>

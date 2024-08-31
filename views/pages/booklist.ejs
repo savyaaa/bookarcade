@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link
+      rel="shortcut icon"
+      href="/images/book-icon.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      data-purpose="Layout StyleSheet"
+      title="Web Awesome"
+      href="/css/app-wa-09b459cf485d4b1f3304947240314c05.css?vsn=d"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/all.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-duotone-solid.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-thin.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-solid.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-regular.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-light.css"
+    />
+    <title>BookArcade | BookList</title>
+  </head>
+  <body class="w-screen h-screen overflow-x-hidden">
+    <%- include('../partials/_header.ejs') %>
+    <main class="w-full min-h-[calc(100vh-160px)] px-4 py-8 bg-[#f4efe1]">
+      <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-serif text-[#3c2f2f] mb-6 text-center">
+          My Booklist
+          <span class="block text-xl italic mt-2"
+            >Your personal library of liked books</span
+          >
+        </h1>
+
+        <div class="mb-8">
+          <div class="relative max-w-md mx-auto">
+            <input
+              type="text"
+              id="search"
+              placeholder="Search your liked books..."
+              class="w-full py-2 px-4 pr-10 rounded-full border-2 border-[#8b7d6b] focus:outline-none focus:border-[#5c4f3d] transition-colors duration-300"
+            />
+            <i
+              class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-[#8b7d6b]"
+            ></i>
+          </div>
+        </div>
+
+        <div
+          id="books-container"
+          class="grid grid-cols-1 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 overflow-y-auto"
+        >
+          <!-- Books will be dynamically inserted here -->
+        </div>
+      </div>
+    </main>
+    <%- include('../partials/_footer.ejs') %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const booksContainer = document.getElementById("books-container");
+        let likedBooks = [];
+
+        async function getLikedBooks() {
+          try {
+            const response = await fetch(
+              "http://localhost:5000/api/library/likedbooks",
+              {
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              }
+            );
+            likedBooks = await response.json();
+            displayBooks(likedBooks);
+          } catch (error) {
+            console.error("Failed to fetch liked books:", error);
+            booksContainer.innerHTML =
+              '<p class="text-[#3c2f2f] text-center col-span-full">Failed to load your liked books.</p>';
+          }
+        }
+
+        function displayBooks(booksToDisplay) {
+          booksContainer.innerHTML = "";
+          if (booksToDisplay.length > 0) {
+            booksToDisplay.forEach((book) => {
+              const bookElement = document.createElement("div");
+              bookElement.classList.add(
+                "w-fit",
+                "overflow-hidden",
+                "transition-transform",
+                "duration-300",
+                "hover:scale-105"
+              );
+              bookElement.innerHTML = `
+                <img src="${book.coverImageUrl}" alt="${book.title}" class="w-full h-64 object-contain object-left"/>
+                <div class="py-4">
+                  <h3 title="${book.title}" class="text-lg font-semibold text-[#3c2f2f] mb-2 line-clamp-1 capitalize">${book.title}</h3>
+                  <p class="text-[#5c4f3d] mb-2 capitalize">By ${book.author}</p>
+                  <div>
+                    <a title="Download this book" href="${book.fileUrl}" class="inline-block text-black text-2xl rounded">
+                      <i class="fas fa-download mr-2"></i>
+                    </a>
+                    <button title="Remove from book list"  class="unlike-button text-2xl text-red-500" data-book-id="${book._id}">
+                      <i class="fas fa-heart"></i>
+                    </button>
+                  </div>
+                </div>
+              `;
+              booksContainer.appendChild(bookElement);
+            });
+
+            // Add event listeners to unlike buttons
+            document.querySelectorAll(".unlike-button").forEach((button) => {
+              button.addEventListener("click", handleUnlikeClick);
+            });
+          } else {
+            booksContainer.innerHTML =
+              '<p class="text-[#3c2f2f] text-center col-span-full">You haven\'t liked any books yet. Go to the library to find books you love!</p>';
+          }
+        }
+
+        async function handleUnlikeClick(event) {
+          const button = event.currentTarget;
+          const bookId = button.dataset.bookId;
+
+          try {
+            const response = await fetch(
+              `http://localhost:5000/api/library/books/${bookId}/like`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+                body: JSON.stringify({ isLiked: false }),
+              }
+            );
+
+            if (response.ok) {
+              likedBooks = likedBooks.filter((book) => book._id !== bookId);
+              displayBooks(likedBooks);
+              console.log("Book unliked successfully");
+              // window.location.reload();
+            } else {
+              console.error("Failed to unlike book");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        }
+
+        const searchInput = document.getElementById("search");
+        searchInput.addEventListener("input", () => {
+          const searchValue = searchInput.value.toLowerCase();
+          const filteredBooks = likedBooks.filter((book) => {
+            const bookTitle = book.title.toLowerCase();
+            const bookAuthor = book.author.toLowerCase();
+            return (
+              bookTitle.includes(searchValue) ||
+              bookAuthor.includes(searchValue)
+            );
+          });
+          displayBooks(filteredBooks);
+        });
+
+        getLikedBooks();
+      });
+    </script>
+  </body>
+</html>

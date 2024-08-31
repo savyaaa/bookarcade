@@ -1,0 +1,100 @@
+<header
+  class="w-full flex items-center justify-between gap-5 px-6 bg-slate-900"
+>
+  <h1
+    class="text-3xl p-4 text-[#dbcebb] text-center drop-shadow-2xl font-bold uppercase tracking-wide"
+  >
+    <a href="/" class="no-underline"
+      ><i class="fas fa-book-open mr-1"></i>BookArcade</a
+    >
+  </h1>
+  <nav
+    class="px-2 flex justify-center <%= foundUser?'-translate-x-28':'-translate-x-8' %>"
+  >
+    <ul class="flex gap-5">
+      <li>
+        <a class="text-white hover:text-amber-700 transition-colors" href="/"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          class="text-white hover:text-amber-700 transition-colors"
+          href="/library"
+          >Library</a
+        >
+      </li>
+      <li>
+        <a
+          class="text-white hover:text-amber-700 transition-colors"
+          href="/postbook"
+          >Post</a
+        >
+      </li>
+      <li>
+        <a
+          class="text-white hover:text-amber-700 transition-colors"
+          href="mailto:savyasharma73@gmail.com"
+          >Contact</a
+        >
+      </li>
+    </ul>
+  </nav>
+  <div class="flex gap-4 items-center justify-center relative">
+    <% if (foundUser) { %>
+    <button
+      id="profile-btn"
+      class="rounded-full bg-[#dbcebb] w-10 h-10 flex flex-col items-center justify-center border-none relative"
+    >
+      <%= foundUser.username.toUpperCase().substring(0,1) %>
+    </button>
+    <div
+      id="profile-dropdown"
+      class="bg-white p-3 absolute -translate-y-1 translate-x-5 top-full right-full shadow-xl rounded-md rounded-tr-none flex flex-col items-center justify-center gap-3 z-50"
+    >
+      <a
+        class="w-full text-center rounded-lg transition-all text-black hover:text-amber-700 whitespace-nowrap"
+        href="/booklist"
+        >Your Booklist <i class="fa-sharp fa-light fa-heart"></i
+      ></a>
+      <a
+        class="w-full text-center rounded-lg transition-all text-black hover:text-amber-700 whitespace-nowrap"
+        href="/api/auth/logout"
+        >Logout <i class="fa-regular fa-arrow-right-from-bracket"></i
+      ></a>
+    </div>
+    <% }else { %>
+    <div class="flex gap-4">
+      <a
+        class="bg-amber-700 py-2 px-5 rounded-lg hover:bg-amber-900 transition-all text-white"
+        href="/login"
+        >Login</a
+      >
+      <a
+        class="bg-amber-700 py-2 px-5 rounded-lg hover:bg-amber-900 transition-all text-white"
+        href="/signup"
+        >Signup</a
+      >
+    </div>
+    <% } %>
+  </div>
+  <script>
+    const profileBtn = document.getElementById("profile-btn");
+    const profileDropdown = document.getElementById("profile-dropdown");
+
+    profileDropdown.classList.add("hidden"); // hide by default
+    profileBtn.addEventListener("click", () => {
+      profileDropdown.classList.toggle("hidden"); // Toggles the hidden class
+    });
+
+    // Close the dropdown when clicking outside of it
+    document.addEventListener("click", (e) => {
+      if (
+        !profileBtn.contains(e.target) &&
+        !profileDropdown.contains(e.target)
+      ) {
+        profileDropdown.classList.add("hidden");
+      }
+    });
+  </script>
+</header>

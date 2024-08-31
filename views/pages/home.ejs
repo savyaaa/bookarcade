@@ -3,10 +3,178 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="../../public/css/index.css" />
+    <link
+      rel="shortcut icon"
+      href="/images/book-icon.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      data-purpose="Layout StyleSheet"
+      title="Web Awesome"
+      href="/css/app-wa-09b459cf485d4b1f3304947240314c05.css?vsn=d"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/all.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-duotone-solid.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-thin.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-solid.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-regular.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-light.css"
+    />
+    <link rel="stylesheet" href="/css/main.css" />
+    <title>BookArcade | Home</title>
   </head>
-  <body>
-    <h1 class="text-3xl font-bold underline">Hello world!</h1>
+  <body class="w-screen h-screen overflow-x-hidden">
+    <%- include('../partials/_header.ejs') %>
+    <main class="w-full relative">
+      <section
+        class="w-full flex flex-col items-center justify-center relative"
+      >
+        <div class="w-full relative">
+          <img
+            class="w-full object-cover relative"
+            src="/images/bg-image-1.jpg"
+            alt=""
+          />
+        </div>
+        <div class="w-full h-full flex items-center justify-center absolute">
+          <div
+            class="w-3/5 h-72 bg-[rgb(255,255,255,0.1)] backdrop-blur-sm p-4 flex flex-col items-center justify-center rounded-md"
+          >
+            <h1
+              class="text-[#dbcebb] text-6xl text-center drop-shadow-2xl font-bold uppercase tracking-wide"
+            >
+              BookArcade
+              <p
+                class="text-[#fff] text-3xl text-center mt-3 leading-[42px] drop-shadow-2xl font-semibold tracking-normal normal-case"
+              >
+                Discover. Download. Read. <br />
+                All for Free, Anytime, Anywhere.
+              </p>
+            </h1>
+            <div class="flex mt-4 gap-8">
+              <a
+                href="/library"
+                class="bg-[#d9cbb6] p-3 rounded-lg hover:bg-[#dcc4a3] transition-all"
+                >Explore the library</a
+              >
+              <a
+                href="/postbook"
+                class="bg-[#d9cbb6] p-3 rounded-lg hover:bg-[#dcc4a3] transition-all"
+                >Add Your Own</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="w-full flex items-center justify-evenly pt-8">
+        <div class="flex flex-col items-center justify-center gap-3">
+          <i class="fa-solid fa-magnifying-glass text-7xl text-[#dbcebb]"></i>
+          <h2 class="uppercase text-3xl font-medium">Discover</h2>
+          <p>Endless stories waiting to be found!</p>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-3">
+          <i class="fa-sharp fa-solid fa-download text-7xl text-[#dbcebb]"></i>
+          <h2 class="uppercase text-3xl font-medium">Download</h2>
+          <p>Your favorite books, yours to keep forever.</p>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-3">
+          <i class="fa-solid fa-book-open-cover text-7xl text-[#dbcebb]"></i>
+          <h2 class="uppercase text-3xl font-medium">Read</h2>
+          <p>Dive into new worlds, one page at a time.</p>
+        </div>
+      </div>
+      <section class="w-full min-h-[550px] h-[550px] flex mt-10">
+        <div
+          class="w-1/2 bg-[#d6bf9f] h-full flex flex-col justify-between pt-4"
+        >
+          <div class="flex flex-col pl-4">
+            <p class="uppercase italic font-normal text-3xl mt-4">
+              Unlock New Worlds
+            </p>
+            <div class="w-2/3 h-[1.5px] bg-slate-900 mt-8"></div>
+            <h1 class="text-6xl leading-[80px] italic font-serif mt-4">
+              Explore <br />
+              The <br />
+              Library
+            </h1>
+            <a
+              href="/library"
+              class="flex items-center justify-start gap-2 text-lg mt-8 bg-[#ba6c3b] w-max p-3 rounded-lg hover:rounded-3xl transition-all shadow-2xl"
+              >Lets Go <i class="fa-light fa-arrow-right"></i
+            ></a>
+          </div>
+          <div class="w-full h-16 bg-slate-900 flex items-center pl-4">
+            <marquee
+              behavior="scrolling"
+              direction="right"
+              loop="50"
+              scrollamount="10"
+            >
+              <p class="text-white text-xl italic">
+                Discover knowledge at your fingertips
+              </p>
+            </marquee>
+          </div>
+        </div>
+        <div class="max-w-[50%] w-1/2 h-full">
+          <img
+            src="/images/explore-lib-img.jpg"
+            alt=""
+            class="overflow-hidden object-cover h-full"
+          />
+        </div>
+      </section>
+      <section class="w-full flex flex-row-reverse relative">
+        <div
+          class="bg-[rgb(0,0,0,0.2)] w-full h-full flex flex-col items-center justify-center pt-4 absolute"
+        >
+          <h1
+            class="text-6xl leading-[80px] italic font-serif mt-4 text-center text-white bg-[rgb(0,0,0,0.3)] backdrop-blur p-4 rounded-xl"
+          >
+            "A Library Never Stops Growing <br />Add Your Books and Fuel the
+            Community!"
+          </h1>
+          <a
+            href="/postbook"
+            class="flex items-center justify-start gap-2 text-2xl mt-8 bg-[#ba6c3b] w-max p-3 rounded-lg hover:rounded-3xl transition-all shadow-2xl"
+            >Lets Go <i class="fa-light fa-arrow-right"></i
+          ></a>
+          <div class="flex flex-col items-center justify-center pl-4"></div>
+        </div>
+        <div class="w-full h-full">
+          <img
+            src="/images/bg-image-2.jpg"
+            alt=""
+            class="overflow-hidden object-cover w-full h-full"
+          />
+        </div>
+      </section>
+    </main>
+    <%- include('../partials/_footer.ejs') %>
+    <script src="https://cdn.tailwindcss.com"></script>
   </body>
 </html>

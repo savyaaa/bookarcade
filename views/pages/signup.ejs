@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="/images/book-icon.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      data-purpose="Layout StyleSheet"
+      title="Web Awesome"
+      href="/css/app-wa-09b459cf485d4b1f3304947240314c05.css?vsn=d"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/all.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-duotone-solid.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-thin.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-solid.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-regular.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.6.0/css/sharp-light.css"
+    />
+    <link rel="stylesheet" href="/css/main.css" />
+    <title>BookArcade | Signup</title>
+  </head>
+  <body class="w-screen h-screen overflow-x-hidden">
+    <%- include('../partials/_header.ejs') %>
+    <main
+      class="w-full h-full relative bg-gradient-to-tl from-[#f4efe1] via-[#ba6c3b] to-amber-700 text-white min-h-screen flex items-center justify-center"
+    >
+      <div
+        class="bg-amber-50 bg-opacity-30 p-8 rounded-lg shadow-2xl w-96 backdrop-blur-sm"
+      >
+        <h1 class="text-4xl font-bold mb-6 text-center text-amber-200">
+          <i class="fas fa-book-open mr-2"></i>BookArcade
+        </h1>
+        <h2 class="text-2xl font-semibold mb-6 text-center">Sign Up</h2>
+        <form id="signupForm" class="space-y-4">
+          <div class="relative">
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              class="w-full bg-amber-100 bg-opacity-50 rounded text-white px-4 py-2 outline-none focus:ring-2 focus:ring-amber-200 transition-all duration-300 pl-10"
+              placeholder="Username"
+            />
+            <i class="fas fa-user absolute left-3 top-3 text-amber-700"></i>
+          </div>
+          <div class="relative">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full bg-amber-100 bg-opacity-50 rounded text-white px-4 py-2 outline-none focus:ring-2 focus:ring-amber-200 transition-all duration-300 pl-10"
+              placeholder="Email"
+            />
+            <i class="fas fa-envelope absolute left-3 top-3 text-amber-700"></i>
+          </div>
+          <div class="relative">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              class="w-full bg-amber-100 bg-opacity-50 rounded text-white px-4 py-2 outline-none focus:ring-2 focus:ring-amber-200 transition-all duration-300 pl-10"
+              placeholder="Password"
+            />
+            <i class="fas fa-lock absolute left-3 top-3 text-amber-700"></i>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-amber-900 hover:bg-opacity-80 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105"
+          >
+            <i class="fas fa-sign-in-alt mr-2"></i>Sign Up
+          </button>
+        </form>
+        <p class="mt-4 text-center text-sm">
+          Already have an account?
+          <a href="/login" class="text-amber-200 hover:underline"> Log in</a>
+        </p>
+      </div>
+    </main>
+    <%- include('../partials/_footer.ejs') %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const formData = new FormData(event.target);
+          const data = {
+            username: formData.get("username"),
+            email: formData.get("email"),
+            password: formData.get("password"),
+          };
+
+          try {
+            const response = await fetch(
+              "http://localhost:5000/api/auth/signup",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              }
+            );
+
+            const result = await response.json();
+            if (response.ok) {
+              console.log(result.message);
+              window.location.href = "/library";
+            } else {
+              console.log(result.message);
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        });
+    </script>
+  </body>
+</html>
